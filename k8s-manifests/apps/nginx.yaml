@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: nginx-deployment
 spec:
-  replicas: 3git add . # 서버 2대를 띄워라
+  replicas: 3 # 서버 2대를 띄워라
   selector:
     matchLabels:
       app: nginx
