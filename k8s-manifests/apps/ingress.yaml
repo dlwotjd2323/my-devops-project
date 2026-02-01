@@ -1,0 +1,19 @@
+# 1. Ingress: 외부 트래픽을 어떤 서비스로 보낼지 결정하는 라우팅 규칙
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    # k3s 기본 컨트롤러인 traefik을 사용하겠다는 선언
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service # 아까 만든 서비스 이름과 일치해야 함
+            port:
+              number: 80 # 서비스의 포트 번호

@@ -1,0 +1,13 @@
+# Terraform 관련 파일 제외 (가장 큰 원인!)
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# 로그 및 임시 파일
+*.log
+*.tmp
+
+# 바이너리 파일
+kubectl
+k3s.yaml

@@ -1,0 +1,35 @@
+# 1. Deployment: 어떤 컨테이너를 몇 개 띄울지 결정
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2 # 서버 2대를 띄워라
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+---
+# 2. Service: 서버들을 하나로 묶어 내부 통로를 만듦
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP # 내부에서만 통신 (나중에 Ingress로 뚫어줄 예정)

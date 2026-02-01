@@ -1,0 +1,29 @@
+---
+# 1. 플레이북 시작: k3s 노드 그룹을 대상으로 설정
+- name: "M2. Install k3s on AWS EC2"
+  hosts: k3s_nodes
+  become: yes # 모든 명령을 sudo 권한으로 실행
+
+  tasks:
+    # 2. 패키지 매니저 업데이트 (안정적인 설치를 위해 필수)
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    # 3. k3s 공식 스크립트를 이용한 자동 설치
+    # curl로 스크립트를 받아와서 쉘로 실행합니다.
+    - name: Install k3s using official script
+      shell: |
+        curl -sfL https://get.k3s.io | sh -
+      args:
+        creates: /usr/local/bin/k3s # 이미 설치되어 있다면 실행하지 않음 (멱등성 확보)
+
+    # 4. 설정 파일 권한 변경 (중요!)
+    # 기본적으로 k3s.yaml은 root만 볼 수 있는데, 외부 접속을 위해 권한을 0644로 풉니다.
+    - name: Change permission of k3s.yaml for remote access
+      file:
+        path: /etc/rancher/k3s/k3s.yaml
+        mode: '0644'
+
+        
